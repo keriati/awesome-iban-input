@@ -1,0 +1,33 @@
+The Awesome IBAN input
+
+Welcome to team George! So far we managed to provide one of the best
+netbanking experiences in the world. So we can keep our market leading
+position, we come up with new ways to impress our customers as often as
+possible. Our creative team found another way to make the life of our
+users better with a revolutionary way to enter the International Bank
+Account Number to our system.
+
+First a few facts about the International Bank Account Number:
+
+ - At the moment our system supports International Bank Account Numbers
+   that are 24 characters long.
+ - The first two characters are always country codes and as such can
+   only be letters from A-Z.
+ - The last 22 characters are numbers.
+ - The International Bank Account Number is usually displayed in a
+   format split to groups of 4 characters.
+ - Most of the International Bank Account Numbers contain the number
+   zero a lot of time around the middle.
+
+To help our customers submit this difficult numbers into our system, we
+need you to implement a new component, the AwesomeIBANInput that other
+developers can use on their forms. The creative team requires the
+following features for this component:
+
+ - The users should only be able to enter as many characters as long an
+   IBAN can be.
+ - To make the IBAN more readable, the entered IBAN should automatically
+   be formatted so that it is displayed in groups of four characters.
+
+
+

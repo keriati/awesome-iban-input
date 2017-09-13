@@ -1,0 +1,13 @@
+The Awesome IBAN Input
+
+Our creative team found out, that the users are entering the wrong
+characters way to often into our awesome iban input field. To avoid this
+confusion, we would like to introduce some changes:
+
+ - Our awesome input field should only allow letters to be entered into
+   the first two positions and only numbers into the last 22 positions.
+ - When the user is trying to enter the wrong character, our awesome
+   input field should give a visual clue that his action was refused.
+   The design team suggest flashing the input field red for a second.
+
+Good Luck!

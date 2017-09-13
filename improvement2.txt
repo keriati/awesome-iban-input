@@ -1,0 +1,21 @@
+The Awesome IBAN Input
+
+Our creative team found out, that the users are still not satisfied with
+the way they can submit an IBAN into our system, as they need to enter
+so many zeros into it. To solve this problem we came up with the
+following new requirements to make the life of our customers easier:
+
+ - When the user entered the beginning part of an IBAN (at least two
+   letters) and they press the TAB key, the input field should be filled
+   with as many zeros as are needed to reach the maximum 24 characters
+   of an IBAN.
+ - After that the users should still be able to enter the ending numbers
+   of the IBAN.
+ - Whenever the user is pressing a number after that, one of the middle
+   0 characters should be removed, and the entered number should be
+   appended to the end.
+ - The above behaviour should only continue until there is no more of
+   the middle zero characters left.
+ - Don't forget to implement a behaviour for the BACKSPACE key.
+
+Good Luck!
