@@ -6,3 +6,64 @@ it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(<AwesomeIBANInput />, div);
 });
+
+describe('IBAN formating',() => {
+  it('formats IBAN correctly for full IBAN', () => {
+    const myIBAN = 'SK1012341234123412341234';
+    const awesomeIBANInput =  new AwesomeIBANInput();
+    expect(awesomeIBANInput.formatIBAN(myIBAN)).toBe('SK10 1234 1234 1234 1234 1234');
+  });
+
+  it('formats IBAN correctly for part IBAN', () => {
+    const myIBAN = 'SK1012341';
+    const awesomeIBANInput =  new AwesomeIBANInput();
+    expect(awesomeIBANInput.formatIBAN(myIBAN)).toBe('SK10 1234 1');
+  });
+
+  it('formats IBAN correctly for small part IBAN (no change)', () => {
+    const myIBAN = 'SK1';
+    const awesomeIBANInput =  new AwesomeIBANInput();
+    expect(awesomeIBANInput.formatIBAN(myIBAN)).toBe('SK1');
+  });
+
+  it('cleans IBAN correctly for full IBAN', () => {
+    const myIBAN = 'SK10 1234 1234 1234 1234 1234';
+    const awesomeIBANInput =  new AwesomeIBANInput();
+    expect(awesomeIBANInput.cleanIBANfromWhitespace(myIBAN)).toBe('SK1012341234123412341234');
+  });
+
+  it('cleans IBAN correctly for part IBAN', () => {
+    const myIBAN = 'SK10 1234 1';
+    const awesomeIBANInput =  new AwesomeIBANInput();
+    expect(awesomeIBANInput.cleanIBANfromWhitespace(myIBAN)).toBe('SK1012341');
+  });
+
+  it('cleans IBAN correctly for small part IBAN (no change)', () => {
+    const myIBAN = 'SK1';
+    const awesomeIBANInput =  new AwesomeIBANInput();
+    expect(awesomeIBANInput.cleanIBANfromWhitespace(myIBAN)).toBe('SK1');
+  });
+});
+
+describe('number and letter testing', () => {
+  if ('tests letter correctly', () => {
+    const awesomeIBANInput =  new AwesomeIBANInput();
+    expect(awesomeIBANInput.isLetter('K')).toBe(true);
+    expect(awesomeIBANInput.isLetter('L')).toBe(true);
+    expect(awesomeIBANInput.isLetter('A')).toBe(true);
+    expect(awesomeIBANInput.isLetter('B')).toBe(true);
+    expect(awesomeIBANInput.isLetter('1')).toBe(false);
+    expect(awesomeIBANInput.isLetter('9')).toBe(false);
+    expect(awesomeIBANInput.isLetter('Tab')).toBe(false);
+  });
+  if ('tests numbers correctly', () => {
+    const awesomeIBANInput =  new AwesomeIBANInput();
+    expect(awesomeIBANInput.isLetter('K')).toBe(false);
+    expect(awesomeIBANInput.isLetter('L')).toBe(false);
+    expect(awesomeIBANInput.isLetter('A')).toBe(false);
+    expect(awesomeIBANInput.isLetter('B')).toBe(false);
+    expect(awesomeIBANInput.isLetter('1')).toBe(true);
+    expect(awesomeIBANInput.isLetter('9')).toBe(true);
+    expect(awesomeIBANInput.isLetter('Tab')).toBe(false);
+  });
+});
