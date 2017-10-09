@@ -4,7 +4,7 @@ import './AwesomeIBANInput.css';
 const MAX_IBAN_LENGTH = 24;
 const MAX_IBAN_LETTERS = 2;
 const FLASH_DURATION = 1000;
-const ALLOWED_KEYS = ['Backspace', 'Shift', 'Delete'];
+const ALLOWED_KEYS = ['Backspace', 'Shift', 'Delete', 'Alt'];
 
 class AwesomeIBANInput extends Component {
   constructor() {
@@ -13,14 +13,18 @@ class AwesomeIBANInput extends Component {
     this.onKeyDown = this.onKeyDown.bind(this);
     this.state = {
       iban: '',
-      flash: false
+      flash: false,
+      tabPosition: 0
     };
   }
 
   onInput() {
-    const value = this.cleanIBANfromWhitespace(this.ibanInput.value);
+    let value = this.cleanIBANfromWhitespace(this.ibanInput.value);
 
-    if (value.length > MAX_IBAN_LENGTH) {
+    if (this.isInputPadded()) {
+      value = this.removeCharacterOnIndex(value,this.state.tabPosition);
+
+    } else if (value.length > MAX_IBAN_LENGTH) {
       return;
     }
 
@@ -42,12 +46,49 @@ class AwesomeIBANInput extends Component {
         ev.preventDefault();
         this.setFlash();
       }
+    } else if (ev.key === 'Tab') {
+      ev.preventDefault();
+      this.padInputWithZeros();
+    } else if (ev.key === 'Backspace') {
+      if (this.isInputPadded()) {
+        ev.preventDefault();
+        this.onBackspacePadded();
+      }
     } else if (ALLOWED_KEYS.includes(ev.key)){
 
     } else {
       ev.preventDefault();
       this.setFlash();
     }
+  }
+
+  onBackspacePadded() {
+    let myIBAN = this.cleanIBANfromWhitespace(this.state.iban);
+    myIBAN = this.addCharacterOnIndex(myIBAN,this.state.tabPosition,'0');
+    myIBAN = this.removeCharacterOnIndex(myIBAN,MAX_IBAN_LENGTH+1);
+    this.setState({ iban: this.formatIBAN(myIBAN) });
+  }
+
+  padInputWithZeros() {
+    const myIBAN = this.cleanIBANfromWhitespace(this.state.iban);
+    const paddedIBAN = myIBAN.padEnd(MAX_IBAN_LENGTH,'0');
+
+    this.setState({
+      iban: this.formatIBAN(paddedIBAN),
+      tabPosition: myIBAN.length
+    })
+  }
+
+  isInputPadded() {
+    return (this.state.tabPosition > 0);
+  }
+
+  addCharacterOnIndex(string,index,character) {
+    return string.slice(0, index) + character + string.slice(index);
+  }
+
+  removeCharacterOnIndex(string,index) {
+    return string.slice(0, index-1) + string.slice(index);
   }
 
   setFlash() {
