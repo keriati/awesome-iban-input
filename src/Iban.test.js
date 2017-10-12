@@ -1,5 +1,5 @@
 import React from 'react';
-import Iban from './Iban';
+import Iban, { removeCharAtIndex } from './Iban';
 import Enzyme, { shallow } from 'enzyme';
 import renderer from 'react-test-renderer';
 import Adapter from 'enzyme-adapter-react-16';
@@ -12,6 +12,8 @@ const IBAN_WITH_FORMATTING = 'SK34 5678 9012 3456 7890 1234';
 const TOO_LONG_IBAN = IBAN_WITHOUT_FORMATTING + '1';
 const INVALID_IBAN_WITH_TOO_MANY_LETTERS = 'SKA4 5678 9012 3456 7890 1234';
 const INVALID_IBAN_WITHOUT_STARTING_LETTERS = '1234 5678 9012 3456 7890 1234';
+const INITIAL_LETTERS = 'SK';
+const IBAN_WITH_PREFILLED_ZEROES = 'SK0000000000000000000000';
 
 const createIban = function (iban, onChange) {
     return shallow((
@@ -23,7 +25,11 @@ const writeToInput = function (input, value) {
     input.find('input').simulate('change', { target: { value } });
 };
 
-const getInputValue = function(input) {
+const simulateTabKey = function (input) {
+    input.find('input').simulate('keyDown', { key: 'Tab', preventDefault: function () { } });
+};
+
+const getInputValue = function (input) {
     return input.find('input').props().value;
 }
 
@@ -84,4 +90,33 @@ it('does not call callback on input change when input starts with too many lette
     writeToInput(iban, INVALID_IBAN_WITH_TOO_MANY_LETTERS);
 
     expect(mockOnChange).not.toBeCalled();
+});
+
+it('calls callback with prefilled 0s after pressing Tab', function () {
+    const mockOnChange = jest.fn();
+    const iban = createIban(INITIAL_LETTERS, mockOnChange);
+
+    simulateTabKey(iban);
+
+    expect(mockOnChange).toBeCalled();
+    expect(mockOnChange.mock.calls[0][0]).toBe(IBAN_WITH_PREFILLED_ZEROES);
+});
+
+it('does not call callback with prefilled 0s after pressing Tab if there are not initial letters', function () {
+    const mockOnChange = jest.fn();
+    const iban = createIban('', mockOnChange);
+
+    simulateTabKey(iban);
+
+    expect(mockOnChange).not.toBeCalled();
+});
+
+it('removes char at index', function () {
+    const input = '1';
+    const index = 0;
+    const expected = '';
+
+    const actual = removeCharAtIndex(input, index);
+
+    expect(actual).toBe(expected);
 });
